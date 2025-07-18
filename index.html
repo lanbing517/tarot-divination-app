@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>塔羅牌占卜 🔮</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .mode-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .mode-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .draw-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .draw-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            min-width: 200px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .draw-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .draw-button:active {
+            transform: translateY(-1px);
+        }
+
+        .cards-container {
+            margin-top: 30px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0;
+            justify-content: center;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .search-input {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1rem;
+            min-width: 250px;
+            outline: none;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .interpretation {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .interpretation h3 {
+            margin-bottom: 15px;
+            color: #fff;
+            font-size: 1.4rem;
+        }
+
+        .interpretation p {
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-positions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .position-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .position-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .position-card h4 {
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .position-card p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .mode-selector {
+                gap: 5px;
+            }
+            
+            .mode-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .search-input {
+                min-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>塔羅牌占卜 🔮</h1>
+            <p>探索內心的智慧，尋找人生的指引</p>
+        </div>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="single">單張抽牌</button>
+            <button class="mode-btn" data-mode="three">三張牌陣</button>
+            <button class="mode-btn" data-mode="celtic">凱爾特十字</button>
+            <button class="mode-btn" data-mode="encyclopedia">塔羅百科</button>
+        </div>
+
+        <div class="content">
+            <div class="draw-section" id="draw-section">
+                <button class="draw-button" id="draw-button" onclick="drawCards()">抽取一張指引牌</button>
+            </div>
+
+            <div class="search-container" id="search-container" style="display: none;">
+                <input type="text" class="search-input" id="search-input" placeholder="搜尋塔羅牌...">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="major">大阿爾克那</button>
+                <button class="filter-btn" data-filter="minor">小阿爾克那</button>
+            </div>
+
+            <div class="cards-container">
+                <div class="cards-grid" id="cards-grid"></div>
+                <div class="card-positions" id="card-positions" style="display: none;"></div>
+            </div>
+
+            <div class="interpretation" id="interpretation" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // 塔羅牌資料庫
+        const tarotCards = [
+            // 大阿爾克那
+            { name: "愚者", category: "大阿爾克那", uprightMeaning: "新開始、純真、自發性", reversedMeaning: "魯莽、愚蠢、風險", description: "代表新的開始和無限的可能性" },
+            { name: "魔術師", category: "大阿爾克那", uprightMeaning: "意志力、創造力、技能", reversedMeaning: "操縱、欺騙、缺乏技能", description: "象徵著將想法轉化為現實的能力" },
+            { name: "女祭司", category: "大阿爾克那", uprightMeaning: "直覺、神秘、內在智慧", reversedMeaning: "缺乏直覺、秘密、隱瞞", description: "代表內在的智慧和直覺力量" },
+            { name: "皇后", category: "大阿爾克那", uprightMeaning: "豐饒、母性、創造力", reversedMeaning: "依賴、空虛、缺乏成長", description: "象徵著豐饒、創造力和母性的力量" },
+            { name: "皇帝", category: "大阿爾克那", uprightMeaning: "權威、結構、控制", reversedMeaning: "專制、缺乏紀律、不負責任", description: "代表權威、秩序和父性的力量" },
+            { name: "教皇", category: "大阿爾克那", uprightMeaning: "傳統、精神指導、教育", reversedMeaning: "反叛、新方法、無知", description: "象徵著傳統智慧和精神指導" },
+            { name: "戀人", category: "大阿爾克那", uprightMeaning: "愛情、和諧、關係", reversedMeaning: "不和諧、錯誤選擇、分離", description: "代表愛情、選擇和人際關係" },
+            { name: "戰車", category: "大阿爾克那", uprightMeaning: "勝利、意志力、控制", reversedMeaning: "缺乏控制、失敗、缺乏方向", description: "象徵著通過意志力獲得勝利" },
+            { name: "力量", category: "大阿爾克那", uprightMeaning: "內在力量、勇氣、耐心", reversedMeaning: "軟弱、自我懷疑、缺乏勇氣", description: "代表內在的力量和勇氣" },
+            { name: "隱者", category: "大阿爾克那", uprightMeaning: "內省、尋求真理、指導", reversedMeaning: "孤立、迷失、拒絕幫助", description: "象徵著內在的探索和尋求智慧" },
+            { name: "命運之輪", category: "大阿爾克那", uprightMeaning: "命運、變化、循環", reversedMeaning: "厄運、缺乏控制、破壞循環", description: "代表命運的轉變和生命的循環" },
+            { name: "正義", category: "大阿爾克那", uprightMeaning: "公正、真理、法律", reversedMeaning: "不公正、缺乏責任、偏見", description: "象徵著公正、平衡和真理" },
+            { name: "倒吊人", category: "大阿爾克那", uprightMeaning: "犧牲、等待、新觀點", reversedMeaning: "拖延、抗拒、無意義犧牲", description: "代表犧牲和從新角度看問題" },
+            { name: "死神", category: "大阿爾克那", uprightMeaning: "結束、轉變、重生", reversedMeaning: "抗拒變化、停滯、腐朽", description: "象徵著結束和新的開始" },
+            { name: "節制", category: "大阿爾克那", uprightMeaning: "平衡、節制、耐心", reversedMeaning: "不平衡、過度、缺乏耐心", description: "代表平衡、節制和和諧" },
+            { name: "惡魔", category: "大阿爾克那", uprightMeaning: "束縛、誘惑、物質主義", reversedMeaning: "釋放、啟蒙、克服誘惑", description: "象徵著束縛和誘惑的力量" },
+            { name: "塔", category: "大阿爾克那", uprightMeaning: "突然變化、啟示、破壞", reversedMeaning: "避免災難、恐懼變化、延遲", description: "代表突然的變化和啟示" },
+            { name: "星星", category: "大阿爾克那", uprightMeaning: "希望、靈感、指導", reversedMeaning: "絕望、缺乏信心、斷線", description: "象徵著希望、靈感和指引" },
+            { name: "月亮", category: "大阿爾克那", uprightMeaning: "幻覺、恐懼、潛意識", reversedMeaning: "釋放恐懼、內在直覺、清晰", description: "代表幻覺、恐懼和潛意識" },
+            { name: "太陽", category: "大阿爾克那", uprightMeaning: "快樂、成功、活力", reversedMeaning: "暫時失敗、缺乏熱情、延遲", description: "象徵著快樂、成功和生命力" },
+            { name: "審判", category: "大阿爾克那", uprightMeaning: "重生、內在呼喚、寬恕", reversedMeaning: "自我懷疑、嚴厲判斷、缺乏寬恕", description: "代表重生、覺醒和內在的呼喚" },
+            { name: "世界", category: "大阿爾克那", uprightMeaning: "完成、成就、旅程結束", reversedMeaning: "缺乏完成、延遲、缺乏成就", description: "象徵著完成、成就和圓滿" },
+            
+            // 小阿爾克那 - 權杖
+            { name: "權杖王牌", category: "小阿爾克那", uprightMeaning: "創造力、新項目、靈感", reversedMeaning: "缺乏創意、延遲、挫折", description: "代表創造力和新的開始" },
+            { name: "權杖二", category: "小阿爾克那", uprightMeaning: "規劃、決策、個人力量", reversedMeaning: "缺乏規劃、恐懼、缺乏控制", description: "象徵著個人力量和未來規劃" },
+            { name: "權杖三", category: "小阿爾克那", uprightMeaning: "擴展、遠見、領導力", reversedMeaning: "缺乏遠見、延遲、缺乏規劃", description: "代表擴展和長遠的眼光" },
+            { name: "權杖四", category: "小阿爾克那", uprightMeaning: "慶祝、和諧、家庭", reversedMeaning: "缺乏和諧、不穩定、延遲慶祝", description: "象徵著慶祝和穩定的基礎" },
+            { name: "權杖五", category: "小阿爾克那", uprightMeaning: "競爭、衝突、分歧", reversedMeaning: "避免衝突、內在衝突、緊張", description: "代表競爭和意見分歧" },
+            { name: "權杖六", category: "小阿爾克那", uprightMeaning: "勝利、成功、公眾認可", reversedMeaning: "私人成就、自我懷疑、延遲", description: "象徵著勝利和公眾的認可" },
+            { name: "權杖七", category: "小阿爾克那", uprightMeaning: "挑戰、堅持、競爭", reversedMeaning: "屈服、缺乏勇氣、壓倒性", description: "代表面對挑戰時的堅持" },
+            { name: "權杖八", category: "小阿爾克那", uprightMeaning: "快速行動、進展、變化", reversedMeaning: "延遲、挫折、缺乏進展", description: "象徵著快速的進展和變化" },
+            { name: "權杖九", category: "小阿爾克那", uprightMeaning: "堅韌、毅力、最後防線", reversedMeaning: "疲憊、偏執、頑固", description: "代表堅韌不拔的毅力" },
+            { name: "權杖十", category: "小阿爾克那", uprightMeaning: "負擔、責任、努力工作", reversedMeaning: "委派、釋放負擔、尋求幫助", description: "象徵著沉重的責任和負擔" },
+            { name: "權杖侍者", category: "小阿爾克那", uprightMeaning: "靈感、發現、自由精神", reversedMeaning: "缺乏方向、限制、挫折", description: "代表年輕的能量和新的想法" },
+            { name: "權杖騎士", category: "小阿爾克那", uprightMeaning: "冒險、衝動、自由", reversedMeaning: "魯莽、不耐煩、缺乏自制", description: "象徵著冒險精神和行動力" },
+            { name: "權杖王后", category: "小阿爾克那", uprightMeaning: "自信、外向、決心", reversedMeaning: "自私、復仇、欺凌", description: "代表自信和外向的領導力" },
+            { name: "權杖國王", category: "小阿爾克那", uprightMeaning: "領導力、願景、企業家精神", reversedMeaning: "專制、控制欲、缺乏遠見", description: "象徵著成熟的領導力和遠見" },
+            
+            // 小阿爾克那 - 聖杯
+            { name: "聖杯王牌", category: "小阿爾克那", uprightMeaning: "新的愛情、情感、直覺", reversedMeaning: "情感封閉、壓抑感情、缺乏愛", description: "代表新的情感開始" },
+            { name: "聖杯二", category: "小阿爾克那", uprightMeaning: "夥伴關係、愛情、統一", reversedMeaning: "分離、不平衡、緊張關係", description: "象徵著愛情和夥伴關係" },
+            { name: "聖杯三", category: "小阿爾克那", uprightMeaning: "友誼、社群、慶祝", reversedMeaning: "孤立、缺乏社交、過度放縱", description: "代表友誼和社交慶祝" },
+            { name: "聖杯四", category: "小阿爾克那", uprightMeaning: "冥想、沉思、重新評估", reversedMeaning: "行動、動機、新機會", description: "象徵著內省和重新評估" },
+            { name: "聖杯五", category: "小阿爾克那", uprightMeaning: "失望、悲傷、失落", reversedMeaning: "接受、前進、寬恕", description: "代表失望和情感的失落" },
+            { name: "聖杯六", category: "小阿爾克那", uprightMeaning: "懷舊、童年、純真", reversedMeaning: "活在過去、缺乏成長、幼稚", description: "象徵著懷舊和童年回憶" },
+            { name: "聖杯七", category: "小阿爾克那", uprightMeaning: "幻想、選擇、願望思考", reversedMeaning: "現實、專注、精神清晰", description: "代表幻想和多種選擇" },
+            { name: "聖杯八", category: "小阿爾克那", uprightMeaning: "放棄、離開、尋求更高目標", reversedMeaning: "恐懼、抗拒離開、停滯", description: "象徵著放棄和尋求新的道路" },
+            { name: "聖杯九", category: "小阿爾克那", uprightMeaning: "滿足、情感滿足、奢華", reversedMeaning: "內在不滿、貪婪、物質主義", description: "代表情感的滿足和願望實現" },
+            { name: "聖杯十", category: "小阿爾克那", uprightMeaning: "情感滿足、家庭幸福、和諧", reversedMeaning: "家庭問題、價值觀衝突、不和諧", description: "象徵著家庭幸福和情感圓滿" },
+            { name: "聖杯侍者", category: "小阿爾克那", uprightMeaning: "創意訊息、直覺、新想法", reversedMeaning: "情感不成熟、創意阻塞、缺乏靈感", description: "代表創意和直覺的訊息" },
+            { name: "聖杯騎士", category: "小阿爾克那", uprightMeaning: "浪漫、魅力、跟隨內心", reversedMeaning: "情緒化、不切實際、情感操縱", description: "象徵著浪漫和情感的追求" },
+            { name: "聖杯王后", category: "小阿爾克那", uprightMeaning: "同情心、直覺、情感成熟", reversedMeaning: "情感不穩定、依賴、缺乏界限", description: "代表情感的智慧和同情心" },
+            { name: "聖杯國王", category: "小阿爾克那", uprightMeaning: "情感平衡、同情、外交", reversedMeaning: "情感操縱、情緒化、缺乏同情", description: "象徵著情感的成熟和平衡" },
+            
+            // 小阿爾克那 - 寶劍
+            { name: "寶劍王牌", category: "小阿爾克那", uprightMeaning: "新想法、心智清晰、突破", reversedMeaning: "混亂、缺乏清晰、錯誤資訊", description: "代表新的想法和心智突破" },
+            { name: "寶劍二", category: "小阿爾克那", uprightMeaning: "困難決定、權衡、僵局", reversedMeaning: "混亂、資訊過載、延遲決定", description: "象徵著困難的選擇和決定" },
+            { name: "寶劍三", category: "小阿爾克那", uprightMeaning: "心碎、悲傷、痛苦", reversedMeaning: "康復、寬恕、前進", description: "代表心碎和情感痛苦" },
+            { name: "寶劍四", category: "小阿爾克那", uprightMeaning: "休息、冥想、恢復", reversedMeaning: "疲憊、倦怠、缺乏進展", description: "象徵著休息和心靈恢復" },
+            { name: "寶劍五", category: "小阿爾克那", uprightMeaning: "衝突、失敗、不和諧", reversedMeaning: "和解、原諒、前進", description: "代表衝突和失敗" },
+            { name: "寶劍六", category: "小阿爾克那", uprightMeaning: "過渡、變化、前進", reversedMeaning: "抗拒變化、停滯、無法前進", description: "象徵著過渡和向前移動" },
+            { name: "寶劍七", category: "小阿爾克那", uprightMeaning: "欺騙、策略、逃避", reversedMeaning: "坦誠、揭露真相、承擔責任", description: "代表策略和可能的欺騙" },
+            { name: "寶劍八", category: "小阿爾克那", uprightMeaning: "限制、陷阱、受害者心態", reversedMeaning: "自由、釋放、新觀點", description: "象徵著限制和束縛" },
+            { name: "寶劍九", category: "小阿爾克那", uprightMeaning: "焦慮、擔憂、噩夢", reversedMeaning: "康復、希望、克服恐懼", description: "代表焦慮和內心的恐懼" },
+            { name: "寶劍十", category: "小阿爾克那", uprightMeaning: "背叛、痛苦結束、失敗", reversedMeaning: "康復、重生、學習教訓", description: "象徵著痛苦的結束和背叛" },
+            { name: "寶劍侍者", category: "小阿爾克那", uprightMeaning: "好奇心、警覺、新想法", reversedMeaning: "缺乏專注、間諜活動、秘密", description: "代表好奇心和新的想法" },
+            { name: "寶劍騎士", category: "小阿爾克那", uprightMeaning: "雄心、行動、衝動", reversedMeaning: "魯莽、缺乏方向、攻擊性", description: "象徵著雄心和快速行動" },
+            { name: "寶劍王后", category: "小阿爾克那", uprightMeaning: "獨立、清晰思考、直接", reversedMeaning: "冷酷、殘忍、缺乏同情", description: "代表獨立和清晰的思考" },
+            { name: "寶劍國王", category: "小阿爾克那", uprightMeaning: "權威、理性、真理", reversedMeaning: "專制、操縱、濫用權力", description: "象徵著理性的權威和真理" },
+            
+            // 小阿爾克那 - 錢幣
+            { name: "錢幣王牌", category: "小阿爾克那", uprightMeaning: "新機會、繁榮、物質開始", reversedMeaning: "失去機會、缺乏規劃、貧困", description: "代表新的物質機會" },
+            { name: "錢幣二", category: "小阿爾克那", uprightMeaning: "平衡、適應性、時間管理", reversedMeaning: "失衡、過度承諾、混亂", description: "象徵著平衡和適應性" },
+            { name: "錢幣三", category: "小阿爾克那", uprightMeaning: "團隊合作、技能、建設", reversedMeaning: "缺乏團隊合作、技能不足、延遲", description: "代表團隊合作和技能建設" },
+            { name: "錢幣四", category: "小阿爾克那", uprightMeaning: "保守、安全、控制", reversedMeaning: "貪婪、物質主義、自私", description: "象徵著保守和安全感" },
+            { name: "錢幣五", category: "小阿爾克那", uprightMeaning: "財務困難、貧困、孤立", reversedMeaning: "財務復甦、精神貧困、改善", description: "代表財務困難和物質缺乏" },
+            { name: "錢幣六", category: "小阿爾克那", uprightMeaning: "慷慨、分享、互惠", reversedMeaning: "自私、債務、不平等", description: "象徵著慷慨和分享" },
+            { name: "錢幣七", category: "小阿爾克那", uprightMeaning: "評估、耐心、長期投資", reversedMeaning: "缺乏耐心、急於求成、短視", description: "代表耐心和長期規劃" },
+            { name: "錢幣八", category: "小阿爾克那", uprightMeaning: "技能發展、努力工作、專注", reversedMeaning: "缺乏專注、完美主義、技能不足", description: "象徵著技能發展和努力工作" },
+            { name: "錢幣九", category: "小阿爾克那", uprightMeaning: "獨立、自給自足、成就", reversedMeaning: "過度工作、缺乏自我照顧、孤立", description: "代表獨立和自給自足" },
+            { name: "錢幣十", category: "小阿爾克那", uprightMeaning: "財富、家庭、傳承", reversedMeaning: "財務失敗、家庭問題、缺乏傳承", description: "象徵著財富和家庭傳承" },
+            { name: "錢幣侍者", category: "小阿爾克那", uprightMeaning: "學習機會、新技能、專注", reversedMeaning: "缺乏進展、拖延、缺乏專注", description: "代表學習和新的技能發展" },
+            { name: "錢幣騎士", category: "小阿爾克那", uprightMeaning: "努力工作、責任感、可靠", reversedMeaning: "懶惰、不負責任、缺乏進展", description: "象徵著努力工作和責任感" },
+            { name: "錢幣王后", category: "小阿爾克那", uprightMeaning: "實用、養育、財務安全", reversedMeaning: "工作狂、嫉妒、財務不安全", description: "代表實用性和養育能力" },
+            { name: "錢幣國王", category: "小阿爾克那", uprightMeaning: "財務成功、企業、安全", reversedMeaning: "貪婪、物質主義、財務不穩定", description: "象徵著財務成功和企業精神" }
+        ];
+
+        let currentMode = 'single';
+        let drawnCards = [];
+        let filteredCards = [...tarotCards];
+
+        // 模式切換
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                updateUI();
+            });
+        });
+
+        // 搜尋功能
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            filteredCards = tarotCards.filter(card => 
+                card.name.toLowerCase().includes(searchTerm)
+            );
+            displayCards();
+        });
+
+        // 篩選功能
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                
+                if (filter === 'all') {
+                    filteredCards = [...tarotCards];
+                } else if (filter === 'major') {
+                    filteredCards = tarotCards.filter(card => card.category === '大阿爾克那');
+                } else if (filter === 'minor') {
+                    filteredCards = tarotCards.filter(card => card.category === '小阿爾克那');
+                }
+                displayCards();
+            });
+        });
+
+        function updateUI() {
+            const drawSection = document.getElementById('draw-section');
+            const searchContainer = document.getElementById('search-container');
+            const cardsGrid = document.getElementById('cards-grid');
+            const cardPositions = document.getElementById('card-positions');
+            const interpretation = document.getElementById('interpretation');
+            
+            // 重置顯示
+            drawSection.style.display = 'block';
+            searchContainer.style.display = 'none';
+            cardsGrid.style.display = 'grid';
+            cardPositions.style.display = 'none';
+            interpretation.style.display = 'none';
+            
+            // 清空內容
+            cardsGrid.innerHTML = '';
+            cardPositions.innerHTML = '';
+            interpretation.innerHTML = '';
+            drawnCards = [];
+            
+            updateDeckText();
+            
+            if (currentMode === 'encyclopedia') {
+                drawSection.style.display = 'none';
+                searchContainer.style.display = 'flex';
+                displayCards();
+            }
+        }
+
+        function updateDeckText() {
+            const drawButton = document.getElementById('draw-button');
+            switch(currentMode) {
+                case 'single':
+                    drawButton.textContent = '抽取一張指引牌';
+                    break;
+                case 'three':
+                    drawButton.textContent = '抽取三張牌陣';
+                    break;
+                case 'celtic':
+                    drawButton.textContent = '開始凱爾特十字占卜';
+                    break;
+            }
+        }
+
+        function drawCards() {
+            const cardsGrid = document.getElementById('cards-grid');
+            const cardPositions = document.getElementById('card-positions');
+            const interpretation = document.getElementById('interpretation');
+            
+            drawnCards = [];
+            cardsGrid.innerHTML = '';
+            cardPositions.innerHTML = '';
+            
+            if (currentMode === 'single') {
+                const randomCard = getRandomCard();
+                const isReversed = Math.random() < 0.5;
+                drawnCards.push({...randomCard, reversed: isReversed});
+                displayDrawnCards();
+            } else if (currentMode === 'three') {
+                for (let i = 0; i < 3; i++) {
+                    const randomCard = getRandomCard();
+                    const isReversed = Math.random() < 0.5;
+                    drawnCards.push({...randomCard, reversed: isReversed});
+                }
+                displayThreeCardSpread();
+            } else if (currentMode === 'celtic') {
+                for (let i = 0; i < 10; i++) {
+                    const randomCard = getRandomCard();
+                    const isReversed = Math.random() < 0.5;
+                    drawnCards.push({...randomCard, reversed: isReversed});
+                }
+                displayCelticCross();
+            }
+            
+            generateInterpretation();
+            interpretation.style.display = 'block';
+        }
+
+        function getRandomCard() {
+            const availableCards = tarotCards.filter(card => 
+                !drawnCards.some(drawn => drawn.name === card.name)
+            );
+            return availableCards[Math.floor(Math.random() * availableCards.length)];
+        }
+
+        function displayCards() {
+            const cardsGrid = document.getElementById('cards-grid');
+            cardsGrid.innerHTML = '';
+            
+            filteredCards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.innerHTML = `
+                    <h3>${card.name}</h3>
+                    <p><strong>類別:</strong> ${card.category}</p>
+                    <p><strong>正位:</strong> ${card.uprightMeaning}</p>
+                    <p><strong>逆位:</strong> ${card.reversedMeaning}</p>
+                `;
+                cardElement.onclick = () => showCardDetails(card);
+                cardsGrid.appendChild(cardElement);
+            });
+        }
+
+        function displayDrawnCards() {
+            const cardsGrid = document.getElementById('cards-grid');
+            cardsGrid.innerHTML = '';
+            
+            drawnCards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.innerHTML = `
+                    <h3>${card.name} ${card.reversed ? '(逆位)' : '(正位)'}</h3>
+                    <p><strong>類別:</strong> ${card.category}</p>
+                    <p><strong>牌義:</strong> ${card.reversed ? card.reversedMeaning : card.uprightMeaning}</p>
+                `;
+                cardsGrid.appendChild(cardElement);
+            });
+        }
+
+        function displayThreeCardSpread() {
+            const cardPositions = document.getElementById('card-positions');
+            const cardsGrid = document.getElementById('cards-grid');
+            cardsGrid.style.display = 'none';
+            cardPositions.style.display = 'grid';
+            
+            const positions = ['過去', '現在', '未來'];
+            
+            drawnCards.forEach((card, index) => {
+                const positionElement = document.createElement('div');
+                positionElement.className = 'position-card';
+                positionElement.innerHTML = `
+                    <div class="position-label">${positions[index]}</div>
+                    <h4>${card.name}</h4>
+                    <p>${card.reversed ? '逆位' : '正位'}</p>
+                    <p>${card.reversed ? card.reversedMeaning : card.uprightMeaning}</p>
+                `;
+                cardPositions.appendChild(positionElement);
+            });
+        }
+
+        function displayCelticCross() {
+            const cardPositions = document.getElementById('card-positions');
+            const cardsGrid = document.getElementById('cards-grid');
+            cardsGrid.style.display = 'none';
+            cardPositions.style.display = 'grid';
+            cardPositions.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            
+            const positions = [
+                '現況', '挑戰', '遠因', '近因', '可能結果',
+                '近期未來', '你的方法', '外在影響', '希望與恐懼', '最終結果'
+            ];
+            
+            drawnCards.forEach((card, index) => {
+                const positionElement = document.createElement('div');
+                positionElement.className = 'position-card';
+                positionElement.innerHTML = `
+                    <div class="position-label">${positions[index]}</div>
+                    <h4>${card.name}</h4>
+                    <p>${card.reversed ? '逆位' : '正位'}</p>
+                    <p>${card.reversed ? card.reversedMeaning : card.uprightMeaning}</p>
+                `;
+                cardPositions.appendChild(positionElement);
+            });
+        }
+
+        function generateInterpretation() {
+            const interpretation = document.getElementById('interpretation');
+            let content = '';
+            
+            if (currentMode === 'single') {
+                const card = drawnCards[0];
+                content = `
+                    <h3>單張牌解讀</h3>
+                    <p><strong>${card.name}</strong> ${card.reversed ? '(逆位)' : '(正位)'}</p>
+                    <p>${card.description}</p>
+                    <p><strong>牌義解釋:</strong> ${card.reversed ? card.reversedMeaning : card.uprightMeaning}</p>
+                    <p>這張牌提醒你關注當前的狀況，並給予你前進的指引。</p>
+                `;
+            } else if (currentMode === 'three') {
+                content = `
+                    <h3>三張牌陣解讀</h3>
+                    <p>這個牌陣展示了你的過去、現在和未來的能量流動。</p>
+                    <p><strong>過去</strong> - ${drawnCards[0].name}: 影響當前情況的根源</p>
+                    <p><strong>現在</strong> - ${drawnCards[1].name}: 你目前面臨的主要能量</p>
+                    <p><strong>未來</strong> - ${drawnCards[2].name}: 如果保持當前路徑的可能發展</p>
+                    <p>整體而言，這個牌陣建議你從過去的經驗中學習，專注於現在的機會，並為未來做好準備。</p>
+                `;
+            } else if (currentMode === 'celtic') {
+                content = `
+                    <h3>凱爾特十字解讀</h3>
+                    <p>這是一個深度的占卜，涵蓋了你問題的各個層面。</p>
+                    <p>中心的牌組顯示了你的核心情況和主要挑戰，而周圍的牌則提供了更深層的洞察。</p>
+                    <p>左側的牌代表過去的影響，右側的牌指向未來的可能性。</p>
+                    <p>這個完整的牌陣為你提供了全面的指引，幫助你理解當前情況的複雜性並找到前進的道路。</p>
+                `;
+            }
+            
+            interpretation.innerHTML = content;
+        }
+
+        function showCardDetails(card) {
+            const interpretation = document.getElementById('interpretation');
+            interpretation.style.display = 'block';
+            interpretation.innerHTML = `
+                <h3>${card.name}</h3>
+                <p><strong>類別:</strong> ${card.category}</p>
+                <p><strong>描述:</strong> ${card.description}</p>
+                <p><strong>正位牌義:</strong> ${card.uprightMeaning}</p>
+                <p><strong>逆位牌義:</strong> ${card.reversedMeaning}</p>
+            `;
+        }
+
+        // 初始化
+        updateUI();
+    </script>
+</body>
+</html>
