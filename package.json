@@ -1,0 +1,37 @@
+{
+  "name": "tarot-divination-app",
+  "version": "1.0.0",
+  "description": "一個功能完整的塔羅牌占卜應用，支持單張抽牌、三張牌陣、凱爾特十字占卜和塔羅百科功能。",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tarot",
+    "divination",
+    "cards",
+    "fortune-telling",
+    "web-app",
+    "javascript",
+    "html",
+    "css"
+  ],
+  "author": "lanbing517",
+  "license": "MIT",
+  "dependencies": {
+    "http": "^0.0.1-security"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lanbing517/tarot-divination-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lanbing517/tarot-divination-app/issues"
+  },
+  "homepage": "https://github.com/lanbing517/tarot-divination-app#readme"
+}
